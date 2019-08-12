@@ -1,0 +1,15 @@
+D:\Work\MacrocsopT1\bin\Debug\MacrocsopT1.exe.config
+D:\Work\MacrocsopT1\bin\Debug\MacrocsopT1.exe
+D:\Work\MacrocsopT1\bin\Debug\MacrocsopT1.pdb
+D:\Work\MacrocsopT1\obj\Debug\MacrocsopT1.csprojAssemblyReference.cache
+D:\Work\MacrocsopT1\obj\Debug\MainWindow.g.cs
+D:\Work\MacrocsopT1\obj\Debug\App.g.cs
+D:\Work\MacrocsopT1\obj\Debug\MacrocsopT1_MarkupCompile.cache
+D:\Work\MacrocsopT1\obj\Debug\MacrocsopT1_MarkupCompile.lref
+D:\Work\MacrocsopT1\obj\Debug\MainWindow.baml
+D:\Work\MacrocsopT1\obj\Debug\MacrocsopT1.g.resources
+D:\Work\MacrocsopT1\obj\Debug\MacrocsopT1.Properties.Resources.resources
+D:\Work\MacrocsopT1\obj\Debug\MacrocsopT1.csproj.GenerateResource.cache
+D:\Work\MacrocsopT1\obj\Debug\MacrocsopT1.csproj.CoreCompileInputs.cache
+D:\Work\MacrocsopT1\obj\Debug\MacrocsopT1.exe
+D:\Work\MacrocsopT1\obj\Debug\MacrocsopT1.pdb
