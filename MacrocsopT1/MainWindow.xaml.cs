@@ -33,12 +33,15 @@ namespace MacrocsopT1
         public MainWindow()
         {
             InitializeComponent();
+            string iniPlace = AppDomain.CurrentDomain.BaseDirectory + "фон.jpg";
+            FirstImage.Source = new BitmapImage(new Uri(iniPlace));
+            SecondImage.Source = new BitmapImage(new Uri(iniPlace));
+            ThirdImage.Source = new BitmapImage(new Uri(iniPlace));
         }
-        
-        WebClient webClient1;
-        WebClient webClient2;
-        WebClient webClient3;
-        private void Download(int imageNumber, string _url, string _place, WebClient webClient)
+
+        WebClient webClient1, webClient2, webClient3;
+        BitmapImage bmi1, bmi2, bmi3;
+        private void Download(int imageNumber, int bmiNumber, string _url, string _place, WebClient webClient)
         {
             try
             {
@@ -46,6 +49,7 @@ namespace MacrocsopT1
                 webClient.DownloadProgressChanged += new DownloadProgressChangedEventHandler(DownloadProgressChanged);
                 webClient.DownloadFileCompleted += new AsyncCompletedEventHandler(DownloadFileCompleted);
                 webClient.QueryString.Add("imageNumber", imageNumber.ToString());
+                webClient.QueryString.Add("bmiNumber", bmiNumber.ToString());
                 webClient.DownloadFileAsync(link, _place);
                 currentStop.IsEnabled = true;
                 currentStart.IsEnabled = false;
@@ -61,33 +65,71 @@ namespace MacrocsopT1
             OverallPB.Value = e.ProgressPercentage;
         }
 
+        //private BitmapImage InitializingBMI(BitmapImage bitmapImage, string source)
+        //{
+        //    bitmapImage = new BitmapImage();
+        //    bitmapImage.BeginInit();
+        //    bitmapImage.UriSource = new Uri(source);
+        //    bitmapImage.CacheOption = BitmapCacheOption.OnLoad;
+        //    bitmapImage.CreateOptions = BitmapCreateOptions.IgnoreImageCache | BitmapCreateOptions.DelayCreation;
+        //    bitmapImage.EndInit();
+        //    return bitmapImage;
+        //}
+
         private void DownloadFileCompleted(object sender, AsyncCompletedEventArgs e)
         {
             if (e.Cancelled == false)
             {
-                BitmapImage bmi = new BitmapImage();
-                bmi.BeginInit();
-                bmi.UriSource = new Uri(place);
-                bmi.CacheOption = BitmapCacheOption.OnLoad;
-                bmi.CreateOptions = BitmapCreateOptions.IgnoreImageCache | BitmapCreateOptions.DelayCreation;
-                bmi.EndInit();
-
                 WebClient obj = sender as WebClient;
+                int bmiNumber = Int32.Parse(obj.QueryString["bmiNumber"]);
+                switch (bmiNumber)
+                {
+                    case 1:
+                        place = AppDomain.CurrentDomain.BaseDirectory + "first.jpg";
+                        bmi1 = new BitmapImage();
+                        bmi1.BeginInit();
+                        bmi1.UriSource = new Uri(place);
+                        bmi1.EndInit();
+                        break;
+                    case 2:
+                        place = AppDomain.CurrentDomain.BaseDirectory + "second.jpg";
+                        bmi2 = new BitmapImage();
+                        bmi2.BeginInit();
+                        bmi2.UriSource = new Uri(place);
+                        bmi2.EndInit();
+                        break;
+                    case 3:
+                        place = AppDomain.CurrentDomain.BaseDirectory + "third.jpg";
+                        bmi3 = new BitmapImage();
+                        bmi3.BeginInit();
+                        bmi3.UriSource = new Uri(place);
+                        bmi3.EndInit();
+                        break;
+                    default:
+                        break;
+                }
+                //BitmapImage bmi = new BitmapImage();
+                //bmi.BeginInit();
+                //bmi.UriSource = new Uri(place);
+                //bmi.CacheOption = BitmapCacheOption.OnLoad;
+                //bmi.CreateOptions = BitmapCreateOptions.IgnoreImageCache; //| BitmapCreateOptions.DelayCreation;
+                //bmi.EndInit();
+
                 int imageNumber = Int32.Parse(obj.QueryString["imageNumber"]);
                 switch (imageNumber)
                 {
                     case 1:
-                        FirstImage.Source = bmi;
+                        FirstImage.Source = bmi1;
                         Start1Btn.IsEnabled = true;
                         Stop1Btn.IsEnabled = false;
                         break;
                     case 2:
-                        SecondImage.Source = bmi;
+                        SecondImage.Source = bmi2;
                         Start2Btn.IsEnabled = true;
                         Stop2Btn.IsEnabled = false;
                         break;
                     case 3:
-                        ThirdImage.Source = bmi;
+                        ThirdImage.Source = bmi3;
                         Start3Btn.IsEnabled = true;
                         Stop3Btn.IsEnabled = false;
                         break;
@@ -105,14 +147,14 @@ namespace MacrocsopT1
                 currentImage = FirstImage;
                 currentStop = Stop1Btn;
                 currentStart = Start1Btn;
-                Download(1, url, place, webClient1);
+                Download(1, 1, url, place, webClient1);
             }
         }
 
         private void Filling(TextBox tb)
         {
             if (tb.Text.Contains(" ") || tb.Text == "")
-                tb.Text = "Введите URL";
+                tb.Text = "Enter URL...";
         }
         private void FirstImageTb_PreviewMouseLeftButtonDown(object sender, MouseButtonEventArgs e)
         {
@@ -132,7 +174,7 @@ namespace MacrocsopT1
                 currentImage = SecondImage;
                 currentStop = Stop2Btn;
                 currentStart = Start2Btn;
-                Download(2, url, place, webClient2);
+                Download(2, 2, url, place, webClient2);
             }
         }
 
@@ -147,7 +189,7 @@ namespace MacrocsopT1
                 currentImage = ThirdImage;
                 currentStop = Stop3Btn;
                 currentStart = Start3Btn;
-                Download(3, url, place, webClient3);
+                Download(3, 3, url, place, webClient3);
             }
         }
 
@@ -164,6 +206,34 @@ namespace MacrocsopT1
             Filling(FirstImageTb);
             Filling(SecondImageTb);
         }
+
+        private  void StartAllBtn_Click(object sender, RoutedEventArgs e)
+        {
+            if (!string.IsNullOrEmpty(FirstImageTb.Text) && (FirstImageTb.Text != "Enter URL...") &&
+                !string.IsNullOrEmpty(SecondImageTb.Text) && (SecondImageTb.Text != "Enter URL...") &&
+                !string.IsNullOrEmpty(ThirdImageTb.Text) && (ThirdImageTb.Text != "Enter URL..."))
+            {
+                currentStart = Start1Btn;
+                currentStop = Stop1Btn;
+                place = AppDomain.CurrentDomain.BaseDirectory + "first.jpg";
+                Download(1, 1, FirstImageTb.Text, place, webClient1 = new WebClient());
+
+                currentStart = Start2Btn;
+                currentStop = Stop2Btn;
+                place = AppDomain.CurrentDomain.BaseDirectory + "second.jpg";
+                Download(2, 2, SecondImageTb.Text, place, webClient2 = new WebClient());
+
+                currentStart = Start3Btn;
+                currentStop = Stop3Btn;
+                place = AppDomain.CurrentDomain.BaseDirectory + "third.jpg";
+                Download(3, 3, ThirdImageTb.Text, place, webClient3 = new WebClient());
+            }
+            else
+            {
+                MessageBox.Show("Please enter all three URL addresses correctly...", "Wait, what..?", MessageBoxButton.OK, MessageBoxImage.Error);
+            }
+        }
+
         private void Stop1Btn_Click(object sender, RoutedEventArgs e)
         {
             webClient1.CancelAsync();
