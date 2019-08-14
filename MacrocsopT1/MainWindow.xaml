@@ -5,9 +5,9 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:MacrocsopT1"
         mc:Ignorable="d"
-        Title="Getting sweet cat Images" Height="450" Width="800"
+        Title="Getting sweet cat Images" Height="544.8" Width="800"
         Icon="D:\Work\MacrocsopT1\bin\Debug\cat.ico">
-    <Grid Background="#FFE2F3FB" Margin="0,0,-0.4,-67">
+    <Grid Background="#FFE2F3FB" Margin="0,0,-0.4,-30.4">
         <Grid.ColumnDefinitions>
             <ColumnDefinition/>
         </Grid.ColumnDefinitions>

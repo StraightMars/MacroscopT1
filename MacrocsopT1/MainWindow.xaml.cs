@@ -29,7 +29,8 @@ namespace MacrocsopT1
 
         private Image currentImage;
         private Button currentStop, currentStart;
-
+        double bytesIn = 0, percentage;
+        double totalB = 0, prevBytes = 0;
         public MainWindow()
         {
             InitializeComponent();
@@ -39,18 +40,44 @@ namespace MacrocsopT1
             ThirdImage.Source = new BitmapImage(new Uri(iniPlace));
         }
 
-        WebClient webClient1, webClient2, webClient3;
+        WebClient webClient1, webClient2, webClient3, checkV = new WebClient();
         BitmapImage bmi1, bmi2, bmi3;
+        //private void GetSize(Uri link)
+        //{
+        //    //wc.OpenRead(link);
+        //    //wc.OpenReadAsync(link);
+        //    Stream str = checkV.OpenRead(link);
+        //    double size = double.Parse(checkV.ResponseHeaders["Content-Length"]);
+        //    str.Close();
+        //    totalB += size;
+        //wc.OpenReadAsync(link);
+        //wc.QueryString.Add("fileSize", fileSize.ToString());
+        //wc.OpenReadCompleted += new OpenReadCompletedEventHandler(OpenReadCompleted);
+        //}
+
+        //private void OpenReadCompleted(object sender, OpenReadCompletedEventArgs e)
+        //{
+        //    WebClient obj = sender as WebClient;
+        //    double size = double.Parse(obj.ResponseHeaders["Content-Length"]);
+        //    totalB += size;
+        //}
+
         private void Download(int imageNumber, int bmiNumber, string _url, string _place, WebClient webClient)
         {
             try
             {
                 Uri link = new Uri(_url);
-                webClient.DownloadProgressChanged += new DownloadProgressChangedEventHandler(DownloadProgressChanged);
-                webClient.DownloadFileCompleted += new AsyncCompletedEventHandler(DownloadFileCompleted);
                 webClient.QueryString.Add("imageNumber", imageNumber.ToString());
                 webClient.QueryString.Add("bmiNumber", bmiNumber.ToString());
+
+                Stream stream = checkV.OpenRead(link);
+                double bytes = double.Parse(checkV.ResponseHeaders["Content-Length"]);
+                stream.Close();
+                totalB += bytes;
+
                 webClient.DownloadFileAsync(link, _place);
+                webClient.DownloadProgressChanged += new DownloadProgressChangedEventHandler(DownloadProgressChanged);
+                webClient.DownloadFileCompleted += new AsyncCompletedEventHandler(DownloadFileCompleted);
                 currentStop.IsEnabled = true;
                 currentStart.IsEnabled = false;
             }
@@ -58,24 +85,61 @@ namespace MacrocsopT1
             {
                 MessageBox.Show("Wrong URL...", "Wait, what..?", MessageBoxButton.OK, MessageBoxImage.Error);
             }
+
         }
+
+        //private void DownloadProgressChanged(object sender, DownloadProgressChangedEventArgs e)
+        //{
+        //    OverallPB.Value = e.ProgressPercentage;
+        //}
 
         private void DownloadProgressChanged(object sender, DownloadProgressChangedEventArgs e)
         {
-            OverallPB.Value = e.ProgressPercentage;
+            //double thisTotal = double.Parse(e.TotalBytesToReceive.ToString());
+            //double bytesInTmp = bytesIn;
+            //if (bytesInTmp >= e.TotalBytesToReceive)
+            //{
+            //    bytesIn = bytesInTmp + double.Parse(e.BytesReceived.ToString());
+            //}
+            //else if (bytesInTmp < e.TotalBytesToReceive)
+            //{
+            //    bytesIn = double.Parse(e.BytesReceived.ToString());
+            //}
+            ////totalB = double.Parse(e.TotalBytesToReceive.ToString());
+            double bytesInTmp = bytesIn;
+
+            //if (bytesInTmp == double.Parse(e.TotalBytesToReceive.ToString()))
+            //{
+            //    bytesIn = bytesInTmp + double.Parse(e.BytesReceived.ToString());
+            //}
+            if (bytesInTmp < double.Parse(e.TotalBytesToReceive.ToString()))
+            {
+                bytesIn = double.Parse(e.BytesReceived.ToString());
+                prevBytes = double.Parse(e.BytesReceived.ToString());
+            }
+            else
+            {
+                if (double.Parse(e.BytesReceived.ToString()) != double.Parse(e.TotalBytesToReceive.ToString()))
+                {
+                    bytesIn = bytesInTmp + (double.Parse(e.BytesReceived.ToString()) - prevBytes);
+                    prevBytes = double.Parse(e.BytesReceived.ToString());
+                }
+                else
+                {
+                    bytesIn = bytesInTmp + (double.Parse(e.BytesReceived.ToString()) - prevBytes);
+                    prevBytes = 0;
+                }
+                //bytesIn = bytesInTmp + double.Parse(e.BytesReceived.ToString());
+            }
+            //prevBytes = double.Parse(e.BytesReceived.ToString());
+            percentage = bytesIn / totalB * 100;
+            OverallPB.Value = int.Parse(Math.Truncate(percentage).ToString());
         }
 
-        //private BitmapImage InitializingBMI(BitmapImage bitmapImage, string source)
-        //{
-        //    bitmapImage = new BitmapImage();
-        //    bitmapImage.BeginInit();
-        //    bitmapImage.UriSource = new Uri(source);
-        //    bitmapImage.CacheOption = BitmapCacheOption.OnLoad;
-        //    bitmapImage.CreateOptions = BitmapCreateOptions.IgnoreImageCache | BitmapCreateOptions.DelayCreation;
-        //    bitmapImage.EndInit();
-        //    return bitmapImage;
-        //}
+        private void OverallProgressChanged(object sender, DownloadProgressChangedEventArgs e)
+        {
 
+        }
         private void DownloadFileCompleted(object sender, AsyncCompletedEventArgs e)
         {
             if (e.Cancelled == false)
@@ -88,6 +152,8 @@ namespace MacrocsopT1
                         place = AppDomain.CurrentDomain.BaseDirectory + "first.jpg";
                         bmi1 = new BitmapImage();
                         bmi1.BeginInit();
+                        bmi1.CacheOption = BitmapCacheOption.OnLoad;
+                        bmi1.CreateOptions = BitmapCreateOptions.IgnoreImageCache;
                         bmi1.UriSource = new Uri(place);
                         bmi1.EndInit();
                         break;
@@ -95,6 +161,8 @@ namespace MacrocsopT1
                         place = AppDomain.CurrentDomain.BaseDirectory + "second.jpg";
                         bmi2 = new BitmapImage();
                         bmi2.BeginInit();
+                        bmi2.CacheOption = BitmapCacheOption.OnLoad;
+                        bmi2.CreateOptions = BitmapCreateOptions.IgnoreImageCache;
                         bmi2.UriSource = new Uri(place);
                         bmi2.EndInit();
                         break;
@@ -102,6 +170,8 @@ namespace MacrocsopT1
                         place = AppDomain.CurrentDomain.BaseDirectory + "third.jpg";
                         bmi3 = new BitmapImage();
                         bmi3.BeginInit();
+                        bmi3.CacheOption = BitmapCacheOption.OnLoad;
+                        bmi3.CreateOptions = BitmapCreateOptions.IgnoreImageCache;
                         bmi3.UriSource = new Uri(place);
                         bmi3.EndInit();
                         break;
@@ -142,6 +212,8 @@ namespace MacrocsopT1
             url = FirstImageTb.Text;
             place = AppDomain.CurrentDomain.BaseDirectory + "first.jpg";
             webClient1 = new WebClient();
+            bytesIn = 0;
+            totalB = 0;
             if (!string.IsNullOrEmpty(url))
             {
                 currentImage = FirstImage;
@@ -169,6 +241,8 @@ namespace MacrocsopT1
             url = SecondImageTb.Text;
             place = AppDomain.CurrentDomain.BaseDirectory + "second.jpg";
             webClient2 = new WebClient();
+            bytesIn = 0;
+            totalB = 0;
             if (!string.IsNullOrEmpty(url))
             {
                 currentImage = SecondImage;
@@ -184,6 +258,8 @@ namespace MacrocsopT1
             url = ThirdImageTb.Text;
             place = AppDomain.CurrentDomain.BaseDirectory + "third.jpg";
             webClient3 = new WebClient();
+            bytesIn = 0;
+            totalB = 0;
             if (!string.IsNullOrEmpty(url))
             {
                 currentImage = ThirdImage;
@@ -207,12 +283,18 @@ namespace MacrocsopT1
             Filling(SecondImageTb);
         }
 
-        private  void StartAllBtn_Click(object sender, RoutedEventArgs e)
+        private async void StartAllBtn_Click(object sender, RoutedEventArgs e)
         {
+            bytesIn = 0;
+            totalB = 0;
             if (!string.IsNullOrEmpty(FirstImageTb.Text) && (FirstImageTb.Text != "Enter URL...") &&
                 !string.IsNullOrEmpty(SecondImageTb.Text) && (SecondImageTb.Text != "Enter URL...") &&
                 !string.IsNullOrEmpty(ThirdImageTb.Text) && (ThirdImageTb.Text != "Enter URL..."))
             {
+                //GetSize(new Uri(FirstImageTb.Text));
+                //GetSize(new Uri(SecondImageTb.Text));
+                //GetSize(new Uri(ThirdImageTb.Text));
+
                 currentStart = Start1Btn;
                 currentStop = Stop1Btn;
                 place = AppDomain.CurrentDomain.BaseDirectory + "first.jpg";
