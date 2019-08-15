@@ -42,27 +42,16 @@ namespace MacrocsopT1
 
         WebClient webClient1, webClient2, webClient3, checkV = new WebClient();
         BitmapImage bmi1, bmi2, bmi3;
-        //private void GetSize(Uri link)
-        //{
-        //    //wc.OpenRead(link);
-        //    //wc.OpenReadAsync(link);
-        //    Stream str = checkV.OpenRead(link);
-        //    double size = double.Parse(checkV.ResponseHeaders["Content-Length"]);
-        //    str.Close();
-        //    totalB += size;
-        //wc.OpenReadAsync(link);
-        //wc.QueryString.Add("fileSize", fileSize.ToString());
-        //wc.OpenReadCompleted += new OpenReadCompletedEventHandler(OpenReadCompleted);
-        //}
 
-        //private void OpenReadCompleted(object sender, OpenReadCompletedEventArgs e)
-        //{
-        //    WebClient obj = sender as WebClient;
-        //    double size = double.Parse(obj.ResponseHeaders["Content-Length"]);
-        //    totalB += size;
-        //}
+        private async Task CheckFileSize(WebClient wc, Uri source)
+        {
+            Stream stream = await wc.OpenReadTaskAsync(source);
+            double size = double.Parse(wc.ResponseHeaders["Content-Length"]);
+            totalB += size;
+            stream.Close();
+        }
 
-        private void Download(int imageNumber, int bmiNumber, string _url, string _place, WebClient webClient)
+        private async void Download(int imageNumber, int bmiNumber, string _url, string _place, WebClient webClient)
         {
             try
             {
@@ -70,10 +59,7 @@ namespace MacrocsopT1
                 webClient.QueryString.Add("imageNumber", imageNumber.ToString());
                 webClient.QueryString.Add("bmiNumber", bmiNumber.ToString());
 
-                Stream stream = checkV.OpenRead(link);
-                double bytes = double.Parse(checkV.ResponseHeaders["Content-Length"]);
-                stream.Close();
-                totalB += bytes;
+                await CheckFileSize(webClient, link);
 
                 webClient.DownloadFileAsync(link, _place);
                 webClient.DownloadProgressChanged += new DownloadProgressChangedEventHandler(DownloadProgressChanged);
@@ -85,53 +71,37 @@ namespace MacrocsopT1
             {
                 MessageBox.Show("Wrong URL...", "Wait, what..?", MessageBoxButton.OK, MessageBoxImage.Error);
             }
-
         }
-
-        //private void DownloadProgressChanged(object sender, DownloadProgressChangedEventArgs e)
-        //{
-        //    OverallPB.Value = e.ProgressPercentage;
-        //}
 
         private void DownloadProgressChanged(object sender, DownloadProgressChangedEventArgs e)
         {
-            //double thisTotal = double.Parse(e.TotalBytesToReceive.ToString());
-            //double bytesInTmp = bytesIn;
-            //if (bytesInTmp >= e.TotalBytesToReceive)
-            //{
-            //    bytesIn = bytesInTmp + double.Parse(e.BytesReceived.ToString());
-            //}
-            //else if (bytesInTmp < e.TotalBytesToReceive)
-            //{
-            //    bytesIn = double.Parse(e.BytesReceived.ToString());
-            //}
-            ////totalB = double.Parse(e.TotalBytesToReceive.ToString());
             double bytesInTmp = bytesIn;
 
-            //if (bytesInTmp == double.Parse(e.TotalBytesToReceive.ToString()))
-            //{
-            //    bytesIn = bytesInTmp + double.Parse(e.BytesReceived.ToString());
-            //}
-            if (bytesInTmp < double.Parse(e.TotalBytesToReceive.ToString()))
+            if (bytesInTmp < e.TotalBytesToReceive)
             {
-                bytesIn = double.Parse(e.BytesReceived.ToString());
-                prevBytes = double.Parse(e.BytesReceived.ToString());
+                if (e.BytesReceived >= prevBytes)
+                {
+                    bytesIn = e.BytesReceived;
+                    prevBytes = e.BytesReceived;
+                }
             }
             else
             {
-                if (double.Parse(e.BytesReceived.ToString()) != double.Parse(e.TotalBytesToReceive.ToString()))
+                if (e.BytesReceived != e.TotalBytesToReceive)
                 {
-                    bytesIn = bytesInTmp + (double.Parse(e.BytesReceived.ToString()) - prevBytes);
-                    prevBytes = double.Parse(e.BytesReceived.ToString());
+                    if (e.BytesReceived >= prevBytes)
+                    {
+                        bytesIn = bytesInTmp + (e.BytesReceived - prevBytes);
+                        prevBytes = e.BytesReceived;
+                    }
                 }
                 else
                 {
-                    bytesIn = bytesInTmp + (double.Parse(e.BytesReceived.ToString()) - prevBytes);
+                    bytesIn = bytesInTmp + (e.BytesReceived - prevBytes);
                     prevBytes = 0;
+
                 }
-                //bytesIn = bytesInTmp + double.Parse(e.BytesReceived.ToString());
             }
-            //prevBytes = double.Parse(e.BytesReceived.ToString());
             percentage = bytesIn / totalB * 100;
             OverallPB.Value = int.Parse(Math.Truncate(percentage).ToString());
         }
@@ -178,12 +148,6 @@ namespace MacrocsopT1
                     default:
                         break;
                 }
-                //BitmapImage bmi = new BitmapImage();
-                //bmi.BeginInit();
-                //bmi.UriSource = new Uri(place);
-                //bmi.CacheOption = BitmapCacheOption.OnLoad;
-                //bmi.CreateOptions = BitmapCreateOptions.IgnoreImageCache; //| BitmapCreateOptions.DelayCreation;
-                //bmi.EndInit();
 
                 int imageNumber = Int32.Parse(obj.QueryString["imageNumber"]);
                 switch (imageNumber)
@@ -241,7 +205,6 @@ namespace MacrocsopT1
             url = SecondImageTb.Text;
             place = AppDomain.CurrentDomain.BaseDirectory + "second.jpg";
             webClient2 = new WebClient();
-            bytesIn = 0;
             totalB = 0;
             if (!string.IsNullOrEmpty(url))
             {
@@ -258,7 +221,6 @@ namespace MacrocsopT1
             url = ThirdImageTb.Text;
             place = AppDomain.CurrentDomain.BaseDirectory + "third.jpg";
             webClient3 = new WebClient();
-            bytesIn = 0;
             totalB = 0;
             if (!string.IsNullOrEmpty(url))
             {
@@ -283,7 +245,7 @@ namespace MacrocsopT1
             Filling(SecondImageTb);
         }
 
-        private async void StartAllBtn_Click(object sender, RoutedEventArgs e)
+        private void StartAllBtn_Click(object sender, RoutedEventArgs e)
         {
             bytesIn = 0;
             totalB = 0;
@@ -291,24 +253,26 @@ namespace MacrocsopT1
                 !string.IsNullOrEmpty(SecondImageTb.Text) && (SecondImageTb.Text != "Enter URL...") &&
                 !string.IsNullOrEmpty(ThirdImageTb.Text) && (ThirdImageTb.Text != "Enter URL..."))
             {
-                //GetSize(new Uri(FirstImageTb.Text));
-                //GetSize(new Uri(SecondImageTb.Text));
-                //GetSize(new Uri(ThirdImageTb.Text));
-
                 currentStart = Start1Btn;
                 currentStop = Stop1Btn;
                 place = AppDomain.CurrentDomain.BaseDirectory + "first.jpg";
                 Download(1, 1, FirstImageTb.Text, place, webClient1 = new WebClient());
+                Start1Btn.IsEnabled = false;
+                Stop1Btn.IsEnabled = true;
 
                 currentStart = Start2Btn;
                 currentStop = Stop2Btn;
                 place = AppDomain.CurrentDomain.BaseDirectory + "second.jpg";
                 Download(2, 2, SecondImageTb.Text, place, webClient2 = new WebClient());
+                Start2Btn.IsEnabled = false;
+                Stop2Btn.IsEnabled = true;
 
                 currentStart = Start3Btn;
                 currentStop = Stop3Btn;
                 place = AppDomain.CurrentDomain.BaseDirectory + "third.jpg";
                 Download(3, 3, ThirdImageTb.Text, place, webClient3 = new WebClient());
+                Start3Btn.IsEnabled = false;
+                Stop3Btn.IsEnabled = true;
             }
             else
             {
