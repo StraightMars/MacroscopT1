@@ -33,6 +33,7 @@ namespace MacrocsopT1
         double totalB = 0, prevBytes = 0;
         public MainWindow()
         {
+            Icon = new BitmapImage(new Uri(AppDomain.CurrentDomain.BaseDirectory + "cat.ico"));
             InitializeComponent();
             string iniPlace = AppDomain.CurrentDomain.BaseDirectory + "фон.jpg";
             FirstImage.Source = new BitmapImage(new Uri(iniPlace));
@@ -104,11 +105,6 @@ namespace MacrocsopT1
             }
             percentage = bytesIn / totalB * 100;
             OverallPB.Value = int.Parse(Math.Truncate(percentage).ToString());
-        }
-
-        private void OverallProgressChanged(object sender, DownloadProgressChangedEventArgs e)
-        {
-
         }
         private void DownloadFileCompleted(object sender, AsyncCompletedEventArgs e)
         {

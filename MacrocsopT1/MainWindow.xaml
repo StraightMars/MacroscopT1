@@ -5,8 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:MacrocsopT1"
         mc:Ignorable="d"
-        Title="Getting sweet cat Images" Height="544.8" Width="800"
-        Icon="D:\Work\MacrocsopT1\bin\Debug\cat.ico">
+        Title="Getting sweet cat Images" Height="544.8" Width="800">
     <Window.Resources>
         <Style x:Key="BtnStart">
             <Setter Property="Control.FontFamily" Value="Arial" />
