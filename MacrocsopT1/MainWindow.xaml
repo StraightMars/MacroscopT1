@@ -1,11 +1,12 @@
 ﻿<Window x:Class="MacrocsopT1.MainWindow"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:uc="clr-namespace:MacrocsopT1.Controls"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:MacrocsopT1"
         mc:Ignorable="d"
-        Title="Getting sweet cat Images" Height="544.8" Width="800">
+        Title="Getting sweet cat Images" Width="804" Height="540">
     <Window.Resources>
         <Style x:Key="BtnStart">
             <Setter Property="Control.FontFamily" Value="Arial" />
@@ -50,23 +51,40 @@
     </Window.Resources>
     <Grid Background="#FFE2F3FB" Margin="0,0,-0.4,-30.4">
         <Grid.ColumnDefinitions>
-            <ColumnDefinition/>
+            <ColumnDefinition Width="*"/>
+            <ColumnDefinition Width="*"/>
+            <ColumnDefinition Width="*"/>
         </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="320" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+        </Grid.RowDefinitions>
+        <!--//>
         <Image x:Name="FirstImage" Margin="60,10,0,0" />
         <Image x:Name="SecondImage" Margin="320,10,0,0" />
         <Image x:Name="ThirdImage" Margin="579,10,0,0" />
         <TextBox x:Name="FirstImageTb" Margin="60,204,0,0" PreviewMouseLeftButtonDown="FirstImageTb_PreviewMouseLeftButtonDown"/>
         <TextBox x:Name="SecondImageTb" Margin="320,204,0,0" PreviewMouseLeftButtonDown="SecondImageTb_PreviewMouseLeftButtonDown"/>
         <TextBox x:Name="ThirdImageTb" Margin="579,204,0,0" PreviewMouseLeftButtonDown="ThirdImageTb_PreviewMouseLeftButtonDown"/>
-        <ProgressBar x:Name="OverallPB" HorizontalAlignment="Left" Height="28" VerticalAlignment="Top" Width="681" Margin="60,428,0,0" Foreground="#FF7AEEB1" BorderBrush="{x:Null}"/>
+        //-->
+        <ProgressBar Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="3" x:Name="OverallPB" HorizontalAlignment="Center" Height="28" VerticalAlignment="Top" Width="681" Margin="0, 50" Foreground="#FF7AEEB1" BorderBrush="{x:Null}"/>
+        <!--//>
         <Button x:Name="Start1Btn" Content="Start" Margin="60,247,0,0" Style="{StaticResource BtnStart}" Click="Start1Btn_Click"/>
-        <Button x:Name="Stop1Btn" Content="Stop" Margin="60,290,0,0" Style="{StaticResource BtnStop}" Click="Stop1Btn_Click" IsEnabled="False"/>
+        <Button x:Name="Stop1Btn" Content="Stop" Margin="60,290,0,0" Style="{StaticResource BtnStop}" Click="Stop1Btn_Click" IsEnabled="False" HorizontalAlignment="Left" Width="162"/>
         <Button x:Name="Start2Btn" Content="Start" Margin="320,247,0,0" Style="{StaticResource BtnStart}" Click="Start2Btn_Click"/>
         <Button x:Name="Stop2Btn" Content="Stop" Margin="320,290,0,0" Style="{StaticResource BtnStop}" Click="Stop2Btn_Click" IsEnabled="False"/>
         <Button x:Name="Start3Btn" Content="Start" Margin="579,247,0,0" Style="{StaticResource BtnStart}" Click="Start3Btn_Click"/>
         <Button x:Name="Stop3Btn" Content="Stop" Margin="579,290,0,0" Style="{StaticResource BtnStop}" Click="Stop3Btn_Click" IsEnabled="False"/>
-        <Label Content="Downloading progress..." HorizontalAlignment="Left" Margin="276,397,0,0" Width="250" FontFamily="Arial" FontSize="14" VerticalAlignment="Top" HorizontalContentAlignment="Center"/>
-        <Button x:Name="StartAllBtn" Content="Download all pictures" HorizontalAlignment="Left" VerticalAlignment="Top" Width="356" Margin="222,342,0,0" Height="30" FontFamily="Arial" FontSize="16" Click="StartAllBtn_Click" Background="#FF166EB6" BorderBrush="{x:Null}" Foreground="White"/>
+        //-->
 
+        <Label Content="Downloading progress..." Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="3" HorizontalAlignment="Center" Margin="0,15" Width="250" FontFamily="Arial" FontSize="14" VerticalAlignment="Top" HorizontalContentAlignment="Center"/>
+        
+        
+        <Button Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="3" x:Name="StartAllBtn" Margin="0, 30" Content="Download all pictures" HorizontalAlignment="Center" VerticalAlignment="Top" Width="374" Height="30" FontFamily="Arial" FontSize="16" Background="#FF166EB6" BorderBrush="{x:Null}" Foreground="White"/>
+        
+        <uc:MyUserControl Grid.Row="0" Grid.Column="0" x:Name="First" />
+        <uc:MyUserControl Grid.Row="0" Grid.Column="1" x:Name="Second" />
+        <uc:MyUserControl Grid.Row="0" Grid.Column="2" x:Name="Third" />
     </Grid>
 </Window>

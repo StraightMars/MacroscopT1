@@ -1,0 +1,57 @@
+﻿<UserControl x:Class="MacrocsopT1.Controls.MyUserControl"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:MacrocsopT1.Controls"
+             mc:Ignorable="d" 
+             d:DesignHeight="320" d:DesignWidth="268">
+    <UserControl.Resources>
+        <Style x:Key="BtnStart">
+            <Setter Property="Control.FontFamily" Value="Arial" />
+            <Setter Property="Control.FontSize" Value="16"/>
+            <Setter Property="Control.Background" Value="#FF166EB6"/>
+            <Setter Property="Control.HorizontalAlignment" Value="Left"/>
+            <Setter Property="Control.VerticalAlignment" Value="Top"/>
+            <Setter Property="Control.Width" Value="162"/>
+            <Setter Property="Control.Height" Value="30"/>
+            <Setter Property="Control.Foreground" Value="White"/>
+            <Setter Property="Control.BorderBrush" Value="{x:Null}"/>
+        </Style>
+        <Style x:Key="BtnStop">
+            <Setter Property="Control.FontFamily" Value="Arial" />
+            <Setter Property="Control.FontSize" Value="16"/>
+            <Setter Property="Control.Background" Value="#FFE11E3C"/>
+            <Setter Property="Control.HorizontalAlignment" Value="Left"/>
+            <Setter Property="Control.VerticalAlignment" Value="Top"/>
+            <Setter Property="Control.Width" Value="162"/>
+            <Setter Property="Control.Height" Value="30"/>
+            <Setter Property="Control.Foreground" Value="White"/>
+            <Setter Property="Control.BorderBrush" Value="{x:Null}"/>
+        </Style>
+        <Style TargetType="TextBox">
+            <Setter Property="Control.FontFamily" Value="Arial" />
+            <Setter Property="Control.FontSize" Value="14"/>
+            <Setter Property="Control.HorizontalAlignment" Value="Left"/>
+            <Setter Property="Control.VerticalAlignment" Value="Top"/>
+            <Setter Property="Control.Width" Value="162"/>
+            <Setter Property="Control.Height" Value="20"/>
+            <Setter Property="Control.BorderBrush" Value="{x:Null}"/>
+            <Setter Property="TextAlignment" Value="Center"/>
+            <Setter Property="TextWrapping" Value="Wrap"/>
+            <Setter Property="Text" Value="Enter URL..."/>
+        </Style>
+        <Style TargetType="Image">
+            <Setter Property="Control.VerticalAlignment" Value="Top"/>
+            <Setter Property="Control.HorizontalAlignment" Value="Left"/>
+            <Setter Property="Control.Height" Value="162"/>
+            <Setter Property="Control.Width" Value="162"/>
+        </Style>
+    </UserControl.Resources>
+    <Grid>
+        <Image x:Name="ImageBox" Source="{Binding Path=Image, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Margin="53, 10, 0, 0" />
+        <TextBox x:Name="ImageTb" Text="{Binding Url, Mode=TwoWay}" Margin="53, 204, 0, 0" PreviewMouseLeftButtonDown="ImageTb_PreviewMouseLeftButtonDown" LostFocus="ImageTb_LostFocus" />
+        <Button x:Name="StartBtn" Command="{Binding Path=StartCommand}" Content="Start" Margin="53, 247, 0, 0" Style="{StaticResource BtnStart}"/>
+        <Button x:Name="StopBtn" Command="{Binding Stop}" Content="Stop" Margin="53, 290, 0, 0" Style="{StaticResource BtnStop}" />
+    </Grid>
+</UserControl>
