@@ -23,7 +23,7 @@ namespace MacrocsopT1.Controls
         public MyUserControl()
         {
             InitializeComponent();
-            DataContext = new UserControlViewModel();
+            //DataContext = new UserControlViewModel();
             ImageTb.Text = "Enter URL...";
             //Binding binding = new Binding();
             //binding.ElementName = "ImageTB";

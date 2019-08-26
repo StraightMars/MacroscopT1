@@ -60,30 +60,10 @@
             <RowDefinition Height="Auto" />
             <RowDefinition Height="Auto" />
         </Grid.RowDefinitions>
-        <!--//>
-        <Image x:Name="FirstImage" Margin="60,10,0,0" />
-        <Image x:Name="SecondImage" Margin="320,10,0,0" />
-        <Image x:Name="ThirdImage" Margin="579,10,0,0" />
-        <TextBox x:Name="FirstImageTb" Margin="60,204,0,0" PreviewMouseLeftButtonDown="FirstImageTb_PreviewMouseLeftButtonDown"/>
-        <TextBox x:Name="SecondImageTb" Margin="320,204,0,0" PreviewMouseLeftButtonDown="SecondImageTb_PreviewMouseLeftButtonDown"/>
-        <TextBox x:Name="ThirdImageTb" Margin="579,204,0,0" PreviewMouseLeftButtonDown="ThirdImageTb_PreviewMouseLeftButtonDown"/>
-        //-->
-        <ProgressBar Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="3" x:Name="OverallPB" HorizontalAlignment="Center" Height="28" VerticalAlignment="Top" Width="681" Margin="0, 50" Foreground="#FF7AEEB1" BorderBrush="{x:Null}"/>
-        <!--//>
-        <Button x:Name="Start1Btn" Content="Start" Margin="60,247,0,0" Style="{StaticResource BtnStart}" Click="Start1Btn_Click"/>
-        <Button x:Name="Stop1Btn" Content="Stop" Margin="60,290,0,0" Style="{StaticResource BtnStop}" Click="Stop1Btn_Click" IsEnabled="False" HorizontalAlignment="Left" Width="162"/>
-        <Button x:Name="Start2Btn" Content="Start" Margin="320,247,0,0" Style="{StaticResource BtnStart}" Click="Start2Btn_Click"/>
-        <Button x:Name="Stop2Btn" Content="Stop" Margin="320,290,0,0" Style="{StaticResource BtnStop}" Click="Stop2Btn_Click" IsEnabled="False"/>
-        <Button x:Name="Start3Btn" Content="Start" Margin="579,247,0,0" Style="{StaticResource BtnStart}" Click="Start3Btn_Click"/>
-        <Button x:Name="Stop3Btn" Content="Stop" Margin="579,290,0,0" Style="{StaticResource BtnStop}" Click="Stop3Btn_Click" IsEnabled="False"/>
-        //-->
-
+        <ProgressBar Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="3" x:Name="OverallPB" HorizontalAlignment="Center" Height="28" VerticalAlignment="Top" Width="681" Margin="0, 50" Foreground="#FF7AEEB1" BorderBrush="{x:Null}" Value="{Binding Path=Percent, UpdateSourceTrigger=PropertyChanged}"/>
         <Label Content="Downloading progress..." Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="3" HorizontalAlignment="Center" Margin="0,15" Width="250" FontFamily="Arial" FontSize="14" VerticalAlignment="Top" HorizontalContentAlignment="Center"/>
-        
-        
-        <Button Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="3" x:Name="StartAllBtn" Margin="0, 30" Content="Download all pictures" HorizontalAlignment="Center" VerticalAlignment="Top" Width="374" Height="30" FontFamily="Arial" FontSize="16" Background="#FF166EB6" BorderBrush="{x:Null}" Foreground="White"/>
-        
-        <uc:MyUserControl Grid.Row="0" Grid.Column="0" x:Name="First" />
+        <Button Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="3" x:Name="StartAllBtn" Margin="0, 30" Content="Download all pictures" HorizontalAlignment="Center" VerticalAlignment="Top" Width="374" Height="30" FontFamily="Arial" FontSize="16" Background="#FF166EB6" BorderBrush="{x:Null}" Foreground="White" Command="{Binding Path=StartAllCommand}" IsEnabled="{Binding IsEnabledStartAll}" />
+        <uc:MyUserControl Grid.Row="0" Grid.Column="0" x:Name="First"  />
         <uc:MyUserControl Grid.Row="0" Grid.Column="1" x:Name="Second" />
         <uc:MyUserControl Grid.Row="0" Grid.Column="2" x:Name="Third" />
     </Grid>

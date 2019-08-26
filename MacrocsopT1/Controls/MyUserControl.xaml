@@ -50,8 +50,8 @@
     </UserControl.Resources>
     <Grid>
         <Image x:Name="ImageBox" Source="{Binding Path=Image, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Margin="53, 10, 0, 0" />
-        <TextBox x:Name="ImageTb" Text="{Binding Url, Mode=TwoWay}" Margin="53, 204, 0, 0" PreviewMouseLeftButtonDown="ImageTb_PreviewMouseLeftButtonDown" LostFocus="ImageTb_LostFocus" />
-        <Button x:Name="StartBtn" Command="{Binding Path=StartCommand}" Content="Start" Margin="53, 247, 0, 0" Style="{StaticResource BtnStart}"/>
-        <Button x:Name="StopBtn" Command="{Binding Stop}" Content="Stop" Margin="53, 290, 0, 0" Style="{StaticResource BtnStop}" />
+        <TextBox x:Name="ImageTb" Text="{Binding Path=Url, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Margin="53, 204, 0, 0" PreviewMouseLeftButtonDown="ImageTb_PreviewMouseLeftButtonDown" LostFocus="ImageTb_LostFocus" />
+        <Button x:Name="StartBtn" Command="{Binding Path=StartCommand}" Content="Start" Margin="53, 247, 0, 0" Style="{StaticResource BtnStart}" IsEnabled="{Binding IsEnabledStart}"/>
+        <Button x:Name="StopBtn" Command="{Binding Path=StopCommand}" Content="Stop" Margin="53, 290, 0, 0" Style="{StaticResource BtnStop}" IsEnabled="{Binding IsEnabledStop}"/>
     </Grid>
 </UserControl>
